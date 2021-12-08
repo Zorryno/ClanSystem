@@ -1,0 +1,4 @@
+debugMode: false
+blackList:
+  - "Owner"
+  - "Admin"
