@@ -6,6 +6,7 @@ import de.zorryno.clansystem.util.clans.ClanInvite;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -406,7 +407,7 @@ public class ClanCommand implements CommandExecutor {
             if (displayName.contains(badName))
                 illegal.add(Illegal.DISPLAYNAME);
 
-            if (prefix.contains(badName))
+            if (prefix.contains(badName) || ChatColor.stripColor(prefix).length() > 6)
                 illegal.add(Illegal.PREFIX);
         }
 
