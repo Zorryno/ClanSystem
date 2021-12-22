@@ -407,7 +407,7 @@ public class ClanCommand implements CommandExecutor {
             if (displayName.contains(badName))
                 illegal.add(Illegal.DISPLAYNAME);
 
-            if (prefix.contains(badName) || ChatColor.stripColor(prefix).length() > 6)
+            if (prefix.contains(badName) || ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&', prefix)).length() > 6)
                 illegal.add(Illegal.PREFIX);
         }
 
