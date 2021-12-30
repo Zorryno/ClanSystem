@@ -166,6 +166,7 @@ public class ClanCommand implements CommandExecutor {
 
                 if (clan.getMembers().contains(inviteTarget.getUniqueId())) {
                     player.sendMessage(Main.getMessages().getCache().get("ClanInvite.AlreadyInClan"));
+                    return true;
                 }
                 //send invite
                 new ClanInvite(clan, player, inviteTarget, plugin, 20 * 60 * 5).sendInvite();
