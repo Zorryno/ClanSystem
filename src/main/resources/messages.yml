@@ -24,6 +24,12 @@ ClanInvite:
   InviteDenyInvited: "Du hast die Einladung abgelehnt"
   InviteAcceptInviter: "Der Spieler %name% hat deine Einladung angenommen"
   InviteDenyInviter: "Der Spieler %name% hat deine Einladung abgelehnt"
+ProtectedBlock:
+  NoPermission: "Dieser Block gehört %clan%"
+  Locked: "Dieser Block ist nun gesichert"
+  Unlocked: "Dieser Block ist nicht mehr gesichert"
+  AlreadyLocked: "Dieser Block ist bereits gesichert"
+  AlreadyUnlocked: "Dieser Block ist nicht gesichert gewesen"
 ClanInfo:
   - "-- Clan Info ( %displayName% &r) --"
   - "Name: %name%"
@@ -56,6 +62,10 @@ HelpPage:
   - "Nimm eine aktive Clan Einladung an"
   - "/clan deny"
   - "Lehne eine aktive Clan Einladung ab"
+  - "/clan lock"
+  - "Sichere eine Kiste für deinen Clan"
+  - "/clan unlock"
+  - "Gebe eine Kiste für andere frei"
   - " "
   - "Clan Admin Commands"
   - " "

@@ -2,13 +2,11 @@ package de.zorryno.clansystem.util.clans;
 
 import de.zorryno.clansystem.Main;
 import de.zorryno.zorrynosystems.config.Config;
+import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.Plugin;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 public class Saver {
     private List<Clan> clans;
@@ -52,12 +50,19 @@ public class Saver {
                 members.add(uuid.toString());
 
 
+
             ConfigurationSection section = config.getConfig().createSection(clan.getTeam().getName());
             section.set("Owner", clan.getOwner().toString());
             section.set("DisplayName", clan.getDisplayName());
             section.set("Prefix", clan.getPrefix());
             section.set("Admins", admins);
             section.set("Members", members);
+            ConfigurationSection locations = section.createSection("Blocks");
+
+            Iterator<Location> iterator = clan.getProtectedBlocks().iterator();
+            for (int i = 0; iterator.hasNext(); i++) {
+                locations.set(i + "", iterator.next());
+            }
 
             if (Main.isDebugMode())
                 plugin.getLogger().info("Clan " + clan.getName() + " successfully saved");
@@ -85,7 +90,14 @@ public class Saver {
             for (String uuid : section.getStringList("Members"))
                 members.add(UUID.fromString(uuid));
 
-            Clan clan = new Clan(plugin, owner, name, displayName, prefix, admins, members);
+            List<Location> protectedBlocks = new ArrayList<>();
+            ConfigurationSection locations = section.getConfigurationSection("Blocks");
+            if(locations != null) {
+                for (String locationKey : locations.getKeys(false))
+                    protectedBlocks.add(locations.getLocation(locationKey));
+            }
+
+            Clan clan = new Clan(plugin, owner, name, displayName, prefix, admins, members, protectedBlocks);
 
             if (Main.isDebugMode())
                 plugin.getLogger().info("Clan " + clan.getName() + " successfully loaded");

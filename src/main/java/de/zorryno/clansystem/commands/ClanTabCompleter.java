@@ -65,8 +65,11 @@ public class ClanTabCompleter implements TabCompleter {
 
             if (clan == null)
                 commands.add("create");
-            else
+            else {
                 commands.add("leave");
+                commands.add("lock");
+                commands.add("unlock");
+            }
 
             if (invite != null) {
                 commands.add("accept");

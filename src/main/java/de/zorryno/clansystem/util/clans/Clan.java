@@ -3,6 +3,7 @@ package de.zorryno.clansystem.util.clans;
 import de.zorryno.clansystem.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -24,6 +25,8 @@ public class Clan {
     private final Team team;
     private String prefix;
 
+    private List<Location> protectedBlocks;
+
     /**
      * Creates a new Clan
      *
@@ -32,10 +35,10 @@ public class Clan {
      * @param name        The Team name for the Scoreboard
      * @param displayName The Name of the Clan
      * @param prefix      The Prefix without [ and ] (added in this Method)
-     * @see #Clan(Plugin, UUID, String, String, String, List, List)
+     * @see #Clan(Plugin, UUID, String, String, String, List, List, List)
      */
     public Clan(Plugin plugin, UUID owner, String name, String displayName, String prefix) {
-        this(plugin, owner, name, displayName, "§r[" + prefix + "§r] ", null, null);
+        this(plugin, owner, name, displayName, "§r[" + prefix + "§r] ", null, null, null);
     }
 
     /**
@@ -50,7 +53,7 @@ public class Clan {
      * @param members     The UUID List with all Members
      * @see #Clan(Plugin, UUID, String, String, String)
      */
-    public Clan(Plugin plugin, UUID owner, String name, String displayName, String prefix, List<UUID> admins, List<UUID> members) {
+    public Clan(Plugin plugin, UUID owner, String name, String displayName, String prefix, List<UUID> admins, List<UUID> members, List<Location> protectedBlocks) {
         if (Bukkit.getScoreboardManager() == null)
             throw new NullPointerException("This can't happen call the police or something \n Bukkit.getScoreboardManager() is null");
 
@@ -63,6 +66,7 @@ public class Clan {
         this.owner = owner;
         this.admin = admins != null ? new ArrayList<>(admins) : new ArrayList<>();
         this.members = members != null ? new ArrayList<>(members) : new ArrayList<>();
+        this.protectedBlocks = protectedBlocks != null ? new ArrayList<>(protectedBlocks) : new ArrayList<>();
         for (UUID uuid : this.members) {
             String entryName = Bukkit.getOfflinePlayer(uuid).getName();
             if (entryName != null)
@@ -174,6 +178,28 @@ public class Clan {
         members.add(uuid);
         team.addEntry(player.getName());
         return true;
+    }
+
+    /**
+     * Removes a protected Block
+     *
+     * @param location the Location of the Block to remove
+     */
+    public boolean removeBlock(Location location) {
+        return protectedBlocks.remove(location);
+    }
+
+    /**
+     * Adds a protected Block
+     *
+     * @param location the Location of the Block to add
+     */
+    public boolean addBlock(Location location) {
+        if(!protectedBlocks.contains(location)) {
+            protectedBlocks.add(location);
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -310,6 +336,16 @@ public class Clan {
         membersOnly.removeAll(admin);
         membersOnly.remove(owner);
         return membersOnly;
+    }
+
+    /**
+     * Gets the protected Blocks from this Clan
+     * Changes have no Effect
+     *
+     * @return the Location from the protected Blocks
+     */
+    public List<Location> getProtectedBlocks() {
+        return new ArrayList<>(protectedBlocks);
     }
 
     /**
