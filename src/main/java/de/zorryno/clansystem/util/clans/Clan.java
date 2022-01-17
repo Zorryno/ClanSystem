@@ -454,7 +454,7 @@ public class Clan {
      * @return if the Clans are in an Alliance
      */
     public boolean isInAlliance(Clan clan) {
-        return alliance.contains(clan.getName());
+        return clan != null && alliance.contains(clan.getName());
     }
 
     /**
