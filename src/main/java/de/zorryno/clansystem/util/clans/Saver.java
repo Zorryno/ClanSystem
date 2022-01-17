@@ -7,6 +7,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.Plugin;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Saver {
     private List<Clan> clans;
@@ -64,6 +65,7 @@ public class Saver {
                 locations.set(i + "", iterator.next());
             }
 
+            section.set("Alliance", clan.getAlliances());
             if (Main.isDebugMode())
                 plugin.getLogger().info("Clan " + clan.getName() + " successfully saved");
         }
@@ -97,7 +99,9 @@ public class Saver {
                     protectedBlocks.add(locations.getLocation(locationKey));
             }
 
-            Clan clan = new Clan(plugin, owner, name, displayName, prefix, admins, members, protectedBlocks);
+            List<String> alliance = section.getStringList("Alliance");
+
+            Clan clan = new Clan(plugin, owner, name, displayName, prefix, admins, members, protectedBlocks, alliance);
 
             if (Main.isDebugMode())
                 plugin.getLogger().info("Clan " + clan.getName() + " successfully loaded");
@@ -108,5 +112,13 @@ public class Saver {
         List<String> names = new ArrayList<>();
         clans.forEach((clan -> names.add(clan.getName())));
         return names;
+    }
+
+    public Clan getClanByName(String name) {
+        for (Clan clan : clans) {
+            if (clan.getName().equals(name))
+                return clan;
+        }
+        return null;
     }
 }

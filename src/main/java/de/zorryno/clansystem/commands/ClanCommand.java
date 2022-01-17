@@ -187,9 +187,6 @@ public class ClanCommand implements CommandExecutor {
                         Location rightLocation = ((Chest) doubleChest.getRightSide()).getLocation();
                         Location leftLocation = ((Chest) doubleChest.getLeftSide()).getLocation();
 
-                        Bukkit.broadcastMessage(rightLocation.toString());
-                        Bukkit.broadcastMessage(leftLocation.toString());
-
                         unlocked = clan.removeBlock(rightLocation) | clan.removeBlock(leftLocation);
                     }
                 } else {
@@ -367,6 +364,40 @@ public class ClanCommand implements CommandExecutor {
                 if (!illegalPrefix.isEmpty())
                     return true;
                 clan.setPrefix(args[1]);
+            }
+
+            case "alliance" -> {
+                if (clan == null) {
+                    player.sendMessage(Main.getMessages().getCache().get("NotAClanMember"));
+                    return true;
+                }
+                if (!player.getUniqueId().equals(clan.getOwner())) {
+                    player.sendMessage(Main.getMessages().getCache().get("NotAClanOwner"));
+                    return true;
+                }
+                if (args.length != 2) {
+                    player.sendMessage("/Clan alliance <clanName>");
+                    return true;
+                }
+
+                Clan targetClan = Main.getSaver().getClanByName(args[1]);
+                if(targetClan == null) {
+                    player.sendMessage(Main.getMessages().getCache().get("ClanNotFound"));
+                    return true;
+                }
+
+                if(clan.equals(targetClan)) {
+                    player.sendMessage(Main.getMessages().getCache().get("Alliance.CantAllianceSelf"));
+                    return true;
+                }
+
+                if(clan.isInAlliance(targetClan)) {
+                    clan.removeAlliance(targetClan);
+                    player.sendMessage(Main.getMessages().getCache().get("Alliance.Removed").replace("%clan%", targetClan.getName()));
+                } else {
+                    clan.addAlliance(targetClan);
+                    player.sendMessage(Main.getMessages().getCache().get("Alliance.Created").replace("%clan%", targetClan.getName()));
+                }
             }
 
 

@@ -2,7 +2,6 @@ package de.zorryno.clansystem.listener;
 
 import de.zorryno.clansystem.Main;
 import de.zorryno.clansystem.util.clans.Clan;
-import de.zorryno.clansystem.util.clans.Saver;
 import org.bukkit.Location;
 import org.bukkit.block.*;
 import org.bukkit.event.EventHandler;
@@ -11,7 +10,6 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.DoubleChestInventory;
 import org.bukkit.plugin.Plugin;
 
 import java.util.ArrayList;
@@ -35,7 +33,9 @@ public class LockEngine implements Listener {
         if(clan == null)
             return;
 
-        if(!clan.equals(Clan.getClanFromPlayer(event.getPlayer())) && !event.getPlayer().isOp()) {
+        Clan playerClan = Clan.getClanFromPlayer(event.getPlayer());
+
+        if(playerClan == null || (!clan.equals(playerClan) && !event.getPlayer().isOp() && !clan.isInAlliance(playerClan))) {
             event.setCancelled(true);
             event.getPlayer().sendMessage(Main.getMessages().getCache().get("ProtectedBlock.NoPermission").replace("%clan%", clan.getDisplayName()));
             return;

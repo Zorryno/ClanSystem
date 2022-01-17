@@ -9,10 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scoreboard.Team;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Represents a Clan
@@ -26,6 +23,7 @@ public class Clan {
     private String prefix;
 
     private List<Location> protectedBlocks;
+    private List<String> alliance;
 
     /**
      * Creates a new Clan
@@ -38,7 +36,7 @@ public class Clan {
      * @see #Clan(Plugin, UUID, String, String, String, List, List, List)
      */
     public Clan(Plugin plugin, UUID owner, String name, String displayName, String prefix) {
-        this(plugin, owner, name, displayName, "§r[" + prefix + "§r] ", null, null, null);
+        this(plugin, owner, name, displayName, "§r[" + prefix + "§r] ", null, null, null, null);
     }
 
     /**
@@ -53,7 +51,7 @@ public class Clan {
      * @param members     The UUID List with all Members
      * @see #Clan(Plugin, UUID, String, String, String)
      */
-    public Clan(Plugin plugin, UUID owner, String name, String displayName, String prefix, List<UUID> admins, List<UUID> members, List<Location> protectedBlocks) {
+    public Clan(Plugin plugin, UUID owner, String name, String displayName, String prefix, List<UUID> admins, List<UUID> members, List<Location> protectedBlocks, List<String> alliance) {
         if (Bukkit.getScoreboardManager() == null)
             throw new NullPointerException("This can't happen call the police or something \n Bukkit.getScoreboardManager() is null");
 
@@ -72,6 +70,7 @@ public class Clan {
             if (entryName != null)
                 team.addEntry(entryName);
         }
+        this.alliance = alliance != null ? new ArrayList<>(alliance) : new ArrayList<>();
 
         String ownerName = Bukkit.getOfflinePlayer(owner).getName() != null ? Bukkit.getOfflinePlayer(owner).getName() : owner.toString();
 
@@ -382,7 +381,7 @@ public class Clan {
             adminNames += "\n";
         }
 
-        String memberNames = " ";
+        String memberNames = "";
         for (UUID memberUUID : getMembersOnly()) {
             if (memberUUID.equals(owner)) continue;
             OfflinePlayer member = Bukkit.getOfflinePlayer(memberUUID);
@@ -390,9 +389,15 @@ public class Clan {
             memberNames += "\n";
         }
 
-        HashMap<Integer, String> clanInfo = new HashMap<>();
+        String alliances = "";
+        for(String clanName : alliance) {
+            alliances += clanName;
+            alliances += "\n";
+        }
+
         String finalMemberNames = memberNames;
         String finalAdminNames = adminNames;
+        String finalAlliances = alliances;
         OfflinePlayer offlineOwner = Bukkit.getOfflinePlayer(owner);
         String ownerName = offlineOwner.getName() != null ? offlineOwner.getName() : owner.toString();
         Main.getMessages().getMessagesList("ClanInfo").forEach((message) -> player.sendMessage(message.
@@ -401,15 +406,56 @@ public class Clan {
                     replace("%prefix%", getPrefix()).
                     replace("%owner%", ownerName).
                     replace("%admins%", finalAdminNames).
-                    replace("%members%", finalMemberNames))
+                    replace("%members%", finalMemberNames).
+                    replace("%alliances", finalAlliances))
         );
     }
 
-
+    /**
+     * Checks if a Player is a Admin in this Clan
+     *
+     * @param uuid the UUID from the Player
+     * @return if the Player is an Admin
+     */
     public boolean isAdmin(UUID uuid) {
         return admin.contains(uuid) || owner.equals(uuid);
     }
 
+    /**
+     * Adds an Alliance to this Clan
+     * @param clan the second Clan
+     */
+    public void addAlliance(Clan clan) {
+        if(!alliance.contains(clan.getName()))
+            alliance.add(clan.getName());
+    }
+
+    /**
+     * Removes an Alliance from this clan
+     * @param clan
+     */
+    public void removeAlliance(Clan clan) {
+        alliance.remove(clan.getName());
+    }
+
+    /**
+     * Get all Alliances this Clan have
+     *
+     * @return a List with the Clan names
+     */
+    public List<String> getAlliances() {
+        return new ArrayList<>(alliance);
+    }
+
+    /**
+     * Checks if the Clans are in an Alliance
+     *
+     * @param clan the second Clan
+     * @return if the Clans are in an Alliance
+     */
+    public boolean isInAlliance(Clan clan) {
+        return alliance.contains(clan.getName());
+    }
 
     /**
      * Gets or Creates a Team with this Name

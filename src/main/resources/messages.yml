@@ -30,11 +30,17 @@ ProtectedBlock:
   Unlocked: "Dieser Block ist nicht mehr gesichert"
   AlreadyLocked: "Dieser Block ist bereits gesichert"
   AlreadyUnlocked: "Dieser Block ist nicht gesichert gewesen"
+Alliance:
+  Created: "%clan% wurde zu den Verbündeten Clans hinzugefügt"
+  Removed: "%clan% wurde von den Verbündeten Clans entfernt"
+  CantAllianceSelf: "Du kannst kein Bündnis mit dir selbst eingehen"
 ClanInfo:
   - "-- Clan Info ( %displayName% &r) --"
   - "Name: %name%"
   - "DisplayName: %displayName%"
   - "Prefix: %prefix%"
+  - "Bündnisse"
+  - "%alliances%"
   - ""
   - "Owner: %owner%"
   - ""

@@ -3,6 +3,7 @@ package de.zorryno.clansystem.commands;
 import de.zorryno.clansystem.Main;
 import de.zorryno.clansystem.util.clans.Clan;
 import de.zorryno.clansystem.util.clans.ClanInvite;
+import de.zorryno.clansystem.util.clans.Saver;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -59,43 +60,50 @@ public class ClanTabCompleter implements TabCompleter {
         Clan clan = Clan.getClanFromPlayer(player);
         boolean isClanMember = clan != null;
         ClanInvite invite = ClanInvite.getInvite(player.getUniqueId());
-        if(args.length == 1) {
+        if(args.length == 1) { //NoCondition
             commands.add("info");
             commands.add("help");
 
-            if (clan == null)
+            if (clan == null) //NoClan
                 commands.add("create");
-            else {
+            else { //InClan
                 commands.add("leave");
                 commands.add("lock");
                 commands.add("unlock");
             }
 
-            if (invite != null) {
+            if (invite != null) { //openInvite
                 commands.add("accept");
                 commands.add("deny");
             }
 
-            if(clan != null && clan.getAdmins().contains(player.getUniqueId())) {
+            if(clan != null && clan.getAdmins().contains(player.getUniqueId())) { //ClanAdmin
                 commands.add("kick");
                 commands.add("invite");
             }
 
-            if(clan != null && player.getUniqueId().equals(clan.getOwner())) {
+            if(clan != null && player.getUniqueId().equals(clan.getOwner())) { //Clan Owner
                 commands.add("setAdmin");
                 commands.add("setOwner");
                 commands.add("setDisplayName");
                 commands.add("setPrefix");
+                commands.add("alliance");
             }
 
-            if(player.isOp())
+            if(player.isOp()) { //OP
                 commands.add("reload");
+            }
         }
 
         if(args.length == 2) {
             switch(args[0].toLowerCase()) {
                 case "info":
                     commands.addAll(Main.getSaver().getNames());
+                    break;
+
+                case "alliance":
+                    commands.addAll(Main.getSaver().getNames());
+                    commands.remove(clan.getName());
                     break;
 
                 case "kick":
@@ -112,6 +120,8 @@ public class ClanTabCompleter implements TabCompleter {
                     break;
 
                 case "setadmin":
+                    commands.addAll(clan.getMemberNames());
+                    break;
 
                 case "setowner":
                     List<String> adminTargetNames = new ArrayList<>(clan.getMemberNames());
