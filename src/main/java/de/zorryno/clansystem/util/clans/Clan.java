@@ -33,7 +33,7 @@ public class Clan {
      * @param name        The Team name for the Scoreboard
      * @param displayName The Name of the Clan
      * @param prefix      The Prefix without [ and ] (added in this Method)
-     * @see #Clan(Plugin, UUID, String, String, String, List, List, List)
+     * @see #Clan(Plugin, UUID, String, String, String, List, List, List, List)
      */
     public Clan(Plugin plugin, UUID owner, String name, String displayName, String prefix) {
         this(plugin, owner, name, displayName, "§r[" + prefix + "§r] ", null, null, null, null);
@@ -407,7 +407,7 @@ public class Clan {
                     replace("%owner%", ownerName).
                     replace("%admins%", finalAdminNames).
                     replace("%members%", finalMemberNames).
-                    replace("%alliances", finalAlliances))
+                    replace("%alliances%", finalAlliances))
         );
     }
 

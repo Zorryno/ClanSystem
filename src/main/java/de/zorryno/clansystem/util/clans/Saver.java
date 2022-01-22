@@ -7,7 +7,6 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.Plugin;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Saver {
     private List<Clan> clans;
