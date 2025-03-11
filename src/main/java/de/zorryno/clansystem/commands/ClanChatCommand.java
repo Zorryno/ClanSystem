@@ -24,7 +24,10 @@ public class ClanChatCommand implements CommandExecutor {
 
         String message = "";
         for (String part : args) {
-            message = message + " " + part;
+            if(!message.isBlank()) {
+                message = message + " ";
+            }
+            message = message + part;
         }
 
         for(UUID uuid : clan.getMembers()) {
