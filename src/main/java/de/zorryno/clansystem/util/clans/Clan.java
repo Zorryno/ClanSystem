@@ -412,6 +412,16 @@ public class Clan {
     }
 
     /**
+     * Checks if a Player is the Owner of this Clan
+     *
+     * @param uuid the UUID from the Player
+     * @return if the Player is the Owner
+     */
+    public boolean isOwner(UUID uuid) {
+        return owner.equals(uuid);
+    }
+
+    /**
      * Checks if a Player is a Admin in this Clan
      *
      * @param uuid the UUID from the Player
@@ -419,6 +429,16 @@ public class Clan {
      */
     public boolean isAdmin(UUID uuid) {
         return admin.contains(uuid) || owner.equals(uuid);
+    }
+
+    /**
+     * Checks if a Player is a Member in this Clan
+     *
+     * @param uuid the UUID from the Player
+     * @return if the Player is a Member
+     */
+    public boolean isMember(UUID uuid) {
+        return members.contains(uuid);
     }
 
     /**
@@ -456,6 +476,8 @@ public class Clan {
     public boolean isInAlliance(Clan clan) {
         return clan != null && alliance.contains(clan.getName());
     }
+
+
 
     /**
      * Gets or Creates a Team with this Name

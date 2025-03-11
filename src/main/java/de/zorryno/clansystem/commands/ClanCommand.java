@@ -39,7 +39,7 @@ public class ClanCommand implements CommandExecutor {
         if (!(sender instanceof Player player))
             return true;
 
-        Block targetBlock = player.getTargetBlockExact(5);
+        Block targetBlock = player.getTargetBlock(null, 5);
         Clan clan = Clan.getClanFromPlayer(player);
         boolean isClanMember = clan != null;
         ClanInvite invite = ClanInvite.getInvite(player.getUniqueId());

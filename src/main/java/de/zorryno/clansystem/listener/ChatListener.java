@@ -12,11 +12,17 @@ public class ChatListener implements Listener {
     public void onChatMessage(AsyncPlayerChatEvent event) {
         Clan clan = Clan.getClanFromPlayer(event.getPlayer());
 
-        if(clan == null)
-            return;
-
         event.setCancelled(true);
-        for(Player player : Bukkit.getOnlinePlayers())
-            player.sendMessage(clan.getPrefix() + event.getPlayer().getName() + ": " + event.getMessage());
+
+        String clanPrefix = "";
+        if(clan != null) {
+            clanPrefix = clan.getPrefix();
+        }
+
+
+        for(Player player : Bukkit.getOnlinePlayers()) {
+            player.sendMessage("§aALL§8 » §f" + clanPrefix + event.getPlayer().getName() + ": " + event.getMessage());
+        }
+        Bukkit.getConsoleSender().sendMessage("§aALL§8 » §f" + clanPrefix + event.getPlayer().getName() + ": " + event.getMessage());
     }
 }

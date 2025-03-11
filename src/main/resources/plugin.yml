@@ -1,11 +1,15 @@
 name: ClanSystem
 version: '${project.version}'
 main: de.zorryno.clansystem.Main
-depend: [ZorrynoSystems]
-api-version: 1.16
+api-version: 1.21.4
 author: "zorryno"
 description: "Clan System by zorryno"
 commands:
   clan:
     description: "Command to Manage Clans"
     usage: "/clan"
+  clanchat:
+    aliases:
+      - "cc"
+    description: "Write a message to the Clan"
+    usage: "/clan [message]"

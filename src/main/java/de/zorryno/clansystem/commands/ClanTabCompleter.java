@@ -3,7 +3,6 @@ package de.zorryno.clansystem.commands;
 import de.zorryno.clansystem.Main;
 import de.zorryno.clansystem.util.clans.Clan;
 import de.zorryno.clansystem.util.clans.ClanInvite;
-import de.zorryno.clansystem.util.clans.Saver;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -102,31 +101,42 @@ public class ClanTabCompleter implements TabCompleter {
                     break;
 
                 case "alliance":
-                    commands.addAll(Main.getSaver().getNames());
-                    commands.remove(clan.getName());
+
+                    if(clan != null && clan.isOwner(player.getUniqueId())) {
+                        commands.addAll(Main.getSaver().getNames());
+                        commands.remove(clan.getName());
+                    }
                     break;
 
                 case "kick":
-                    List<String> kickTargets = new ArrayList<>(clan.getMemberNames());
-                    kickTargets.removeAll(clan.getAdminNames());
-                    commands.addAll(kickTargets);
+                    if(clan != null && clan.isAdmin(player.getUniqueId())) {
+                        List<String> kickTargets = new ArrayList<>(clan.getMemberNames());
+                        kickTargets.removeAll(clan.getAdminNames());
+                        commands.addAll(kickTargets);
+                    }
                     break;
 
                 case "invite":
-                    List<String> inviteNames = new ArrayList<>();
-                    Bukkit.getOnlinePlayers().forEach(onlinePlayer -> inviteNames.add(onlinePlayer.getName()));
-                    inviteNames.removeAll(clan.getMemberNames());
-                    commands.addAll(inviteNames);
+                    if(clan != null && clan.isAdmin(player.getUniqueId())) {
+                        List<String> inviteNames = new ArrayList<>();
+                        Bukkit.getOnlinePlayers().forEach(onlinePlayer -> inviteNames.add(onlinePlayer.getName()));
+                        inviteNames.removeAll(clan.getMemberNames());
+                        commands.addAll(inviteNames);
+                    }
                     break;
 
                 case "setadmin":
-                    commands.addAll(clan.getMemberNames());
+                    if(clan != null && clan.isOwner(player.getUniqueId())) {
+                        commands.addAll(clan.getMemberNames());
+                    }
                     break;
 
                 case "setowner":
-                    List<String> adminTargetNames = new ArrayList<>(clan.getMemberNames());
-                    adminTargetNames.remove(Bukkit.getOfflinePlayer(clan.getOwner()).getName());
-                    commands.addAll(adminTargetNames);
+                    if(clan != null && clan.isOwner(player.getUniqueId())) {
+                        List<String> adminTargetNames = new ArrayList<>(clan.getMemberNames());
+                        adminTargetNames.remove(Bukkit.getOfflinePlayer(clan.getOwner()).getName());
+                        commands.addAll(adminTargetNames);
+                    }
                     break;
             }
         }

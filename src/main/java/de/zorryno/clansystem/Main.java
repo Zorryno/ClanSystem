@@ -1,5 +1,6 @@
 package de.zorryno.clansystem;
 
+import de.zorryno.clansystem.commands.ClanChatCommand;
 import de.zorryno.clansystem.commands.ClanCommand;
 import de.zorryno.clansystem.commands.ClanTabCompleter;
 import de.zorryno.clansystem.listener.ChatListener;
@@ -34,6 +35,7 @@ public final class Main extends JavaPlugin {
         saveDefaultConfig();
         getCommand("clan").setExecutor(new ClanCommand(this));
         getCommand("clan").setTabCompleter(new ClanTabCompleter(this));
+        getCommand("clanchat").setExecutor(new ClanChatCommand());
         Bukkit.getPluginManager().registerEvents(new ChatListener(), this);
         Bukkit.getPluginManager().registerEvents(new SetScoreboardListener(), this);
         Bukkit.getPluginManager().registerEvents(new LockEngine(this), this);

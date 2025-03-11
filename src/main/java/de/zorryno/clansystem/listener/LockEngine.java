@@ -40,7 +40,6 @@ public class LockEngine implements Listener {
             event.getPlayer().sendMessage(Main.getMessages().getCache().get("ProtectedBlock.NoPermission").replace("%clan%", clan.getDisplayName()));
             return;
         }
-
     }
 
     @EventHandler
@@ -88,10 +87,12 @@ public class LockEngine implements Listener {
 
         Iterator<Block> iterator = getBlocksAround(event.getBlock()).iterator();
         iterator.forEachRemaining(block -> {
-            Clan blockClan = LockEngine.getOwnerClan(block.getLocation());
-            if(blockClan != null && !blockClan.equals(clan)) {
-                event.setCancelled(true);
-                event.getPlayer().sendMessage(Main.getMessages().getCache().get("ProtectedBlock.NoPermission").replace("%clan%", blockClan.getDisplayName()));
+            if(block.getState() instanceof Container) {
+                Clan blockClan = LockEngine.getOwnerClan(block.getLocation());
+                if (blockClan != null && !blockClan.equals(clan)) {
+                    event.setCancelled(true);
+                    event.getPlayer().sendMessage(Main.getMessages().getCache().get("ProtectedBlock.NoPermission").replace("%clan%", blockClan.getDisplayName()));
+                }
             }
         });
 

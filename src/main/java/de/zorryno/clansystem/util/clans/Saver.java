@@ -95,7 +95,7 @@ public class Saver {
             ConfigurationSection locations = section.getConfigurationSection("Blocks");
             if(locations != null) {
                 for (String locationKey : locations.getKeys(false))
-                    protectedBlocks.add(locations.getLocation(locationKey));
+                    protectedBlocks.add(locations.getSerializable(locationKey, Location.class));
             }
 
             List<String> alliance = section.getStringList("Alliance");
